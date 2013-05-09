@@ -36,29 +36,41 @@ def get():
     path = get_config_path()
     config = load(path)
     if config:
-        return config
+        if is_valid(config):
+            return config
+
+        print 'Aborting due to errors in themetail config'
+        sys.exit(1)
 
     print 'No themetail configuration found at: %s' % path
     sys.exit(1)
 
 
-def has_configured(config, section, keys):
+def has_configured(config, section, keys, log=False):
+    def log(message, *args):
+        if log:
+            print message % args
+
     for key in keys:
         if not config.has_option(section, key):
+            msg = 'ERROR (Config): Missing key "%s" in section "%s"'
+            log(msg, key, section)
             return False
 
         value = config.get(section, key)
         if not value:
+            msg = 'ERROR (Config): Empty value for key "%s" in section "%s"'
+            log(msg, key, section)
             return False
     return True
 
 
-def is_valid_client_section(config):
+def is_valid_client_section(config, log=False):
     required = ['email', 'password']
-    return has_configured(config, 'client', required)
+    return has_configured(config, 'client', required, log=log)
 
 
-def is_valid(config):
-    if not is_valid_client_section(config):
+def is_valid(config, log=False):
+    if not is_valid_client_section(config, log=log):
         return False
     return True
