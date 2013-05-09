@@ -13,12 +13,11 @@ def get_config_path():
     path = os.getenv(CONF_ENV_VARIABLE)
     if path:
         return path
-
-    return os.path.expanduser('~/.themetail.cnf')
+    return '~/.themetail.cnf'
 
 
 def load(path):
-    path = get_config_path()
+    path = os.path.expanduser(get_config_path())
     if not os.path.isfile(path):
         return None
 
