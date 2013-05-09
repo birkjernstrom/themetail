@@ -44,10 +44,12 @@ class TestConfig(unittest.TestCase):
         return conf
 
     def test_exit_without_conf(self):
+        config._conf = None
+
         envvar = config.CONF_ENV_VARIABLE
         backup = os.getenv(envvar)
         os.environ[envvar] = ''
-        self.assertRaises(SystemExit, config.get)
+        self.assertRaises(SystemExit, config.load)
 
         if backup is None:
             os.unsetenv(envvar)

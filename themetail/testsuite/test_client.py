@@ -20,4 +20,23 @@ class TestClient(unittest.TestCase):
         del client.session.cookies['_xsrf']
         client.get_xsrf_token()
         self.assertTrue(client.has_cookie('_xsrf'))
-        client.authenticate()
+
+    def test_signin(self):
+        settings = client.settings
+        passwd = settings.get('client', 'password')
+
+        client.signout()
+
+        settings.set('client', 'password', 'this-is-not-my-password')
+        self.assertFalse(client.signin())
+
+        client.signout()
+
+        settings.set('client', 'password', passwd)
+        self.assertTrue(client.signin())
+
+    def test_signout(self):
+        client.signin()
+        self.assertTrue(client.is_authenticated())
+        client.signout()
+        self.assertFalse(client.is_authenticated())

@@ -6,7 +6,7 @@ import requests
 
 from themetail import config
 
-conf = config.get()
+settings = config.load()
 session = requests.Session()
 
 
@@ -15,8 +15,8 @@ def url(path):
 
 
 def get_credentials():
-    email = conf.get('client', 'email')
-    password = conf.get('client', 'password')
+    email = settings.get('client', 'email')
+    password = settings.get('client', 'password')
     return (email, password)
 
 
@@ -28,20 +28,20 @@ def is_authenticated():
     return has_cookie('tictail')
 
 
-def authenticate():
+def signin():
     if is_authenticated():
         return True
 
     token = get_xsrf_token()
     email, password = get_credentials()
     data = dict(email=email, passwd=password, _xsrf=token, attempt=0)
-    print data
-    print session.cookies
-    res = requests.post(url('/user/signin'), data=data)
-    print res
-    print res.cookies
-    print dir(res)
-    return True
+    response = session.post(url('/user/signin'), data=data)
+    success = response.status_code == 200
+    return (success and is_authenticated())
+
+
+def signout():
+    session.cookies = {}
 
 
 def get_xsrf_token():
