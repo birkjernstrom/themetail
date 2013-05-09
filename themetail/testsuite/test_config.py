@@ -18,7 +18,7 @@ email: example@example.com
 """
 
 
-CLIENT_WITHOUT_USERNAME = """
+CLIENT_WITHOUT_EMAIL = """
 [client]
 password: foobar
 """
@@ -27,7 +27,7 @@ CLIENT_WITHOUT_EITHER = """
 [client]
 """
 
-CLIENT_WITH_ALL = """
+WITH_ALL = """
 [client]
 email: example@example.com
 password: foobar
@@ -56,12 +56,12 @@ class TestConfig(unittest.TestCase):
 
     def test_client_section_validation(self):
         without_password = self.generate_conf(CLIENT_WITHOUT_PASSWORD)
-        without_username = self.generate_conf(CLIENT_WITHOUT_USERNAME)
+        without_email = self.generate_conf(CLIENT_WITHOUT_EMAIL)
         without_either = self.generate_conf(CLIENT_WITHOUT_EITHER)
-        with_all = self.generate_conf(CLIENT_WITH_ALL)
+        with_all = self.generate_conf(WITH_ALL)
 
         validator = config.is_valid_client_section
         self.assertFalse(validator(without_password))
-        self.assertFalse(validator(without_username))
+        self.assertFalse(validator(without_email))
         self.assertFalse(validator(without_either))
         self.assertTrue(validator(with_all))
