@@ -28,16 +28,16 @@ def run():
 def main():
     envvar = config.CONF_ENV_VARIABLE
     backup = os.getenv(envvar)
-    os.putenv(envvar, '~/.themetail_test.cnf')
+    os.environ[envvar] = '~/.themetail_test.cnf'
 
     try:
         exit_code = run()
-    except (Exception, SystemExit):
+    except SystemExit:
         exit_code = 1
 
-    if backup is not None:
-        os.putenv(envvar, backup)
-    else:
+    if backup is None:
         os.unsetenv(envvar)
+    else:
+        os.environ[envvar] = backup
 
     sys.exit(exit_code)

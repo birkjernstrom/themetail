@@ -44,15 +44,15 @@ class TestConfig(unittest.TestCase):
         return conf
 
     def test_exit_without_conf(self):
-        var = config.CONF_ENV_VARIABLE
-        backup = os.getenv(var)
-        os.putenv(var, '')
+        envvar = config.CONF_ENV_VARIABLE
+        backup = os.getenv(envvar)
+        os.environ[envvar] = ''
         self.assertRaises(SystemExit, config.get)
 
         if backup is None:
-            os.unsetenv(var)
+            os.unsetenv(envvar)
         else:
-            os.putenv(var, backup)
+            os.environ[envvar] = backup
 
     def test_client_section_validation(self):
         without_password = self.generate_conf(CLIENT_WITHOUT_PASSWORD)
