@@ -4,8 +4,8 @@
 Themetail - Empowers local development of Tictail themes.
 
 Usage:
-    themetail preview [FILE] [--subdomain=<example>]
-    themetail deploy [FILE] [--subdomain=<example>]
+    themetail preview [FILE] [DIR] [--subdomain=<example>]
+    themetail deploy [FILE] [DIR] [--subdomain=<example>]
 """
 
 import os
@@ -42,7 +42,8 @@ def open_in_browser(url):
 def push(arguments, preview=True):
     filename = arguments.get('FILE', None)
     if not filename:
-        filename = os.path.join(os.getcwd(), 'build/theme.html')
+        directory = arguments.get('DIR', os.getcwd())
+        filename = os.path.join(directory, 'build/theme.html')
 
     subdomain = get_subdomain(arguments)
     store = client.get_store(subdomain)
