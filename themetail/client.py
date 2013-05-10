@@ -103,6 +103,10 @@ def save_theme_from_file(store, theme_file, as_preview=True):
         logging.error('Aborting. Could not find theme build file.')
         return False
 
+    if not os.access(theme_file, os.R_OK):
+        logging.error('Aborting. Cannot read the theme build file.')
+        return False
+
     with open(theme_file, 'r') as build:
         content = build.read().strip()
         return save_theme(store, content, as_preview=as_preview)
