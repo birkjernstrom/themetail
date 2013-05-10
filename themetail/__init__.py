@@ -239,8 +239,15 @@ def clone(arguments):
     theme_path = os.path.join(get_theme_directory(), theme)
     theme_path = '%s/*' % theme_path
 
-    subprocess.call(['mkdir', '-p', directory])
-    subprocess.call(['cp', theme_path, directory])
+    if subprocess.call(['mkdir', '-p', directory]):
+        msg = 'Could not create theme directory %s'
+        util.logger.error(msg, directory)
+        sys.exit(1)
+
+    if subprocess.call(['cp', theme_path, directory]):
+        msg = 'Could not copy theme content to directory %s'
+        util.logger.error(msg, directory)
+        sys.exit(1)
 
 
 def list_themes(arguments):
