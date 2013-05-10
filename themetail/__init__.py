@@ -35,8 +35,7 @@ __version__ = '0.8.0'
 __all__ = [
     'util', 'client',
     'list-themes', 'clone', 'watch', 'deploy', 'preview',
-    'push', 'open_in_browser', 'get_cloneable_themes',
-    'get_theme_directory', 'get_subdomain', 'Watcher',
+    'push', 'open_in_browser', 'get_subdomain', 'Watcher',
     'ensure_valid_watch_directory', 'ensure_valid_watch_file',
     'configure_logging',
 ]
@@ -127,17 +126,6 @@ def get_directory(arguments):
     return os.getcwd()
 
 
-def get_theme_directory():
-    path = os.path.abspath(os.path.dirname(__file__))
-    return os.path.join(path, 'themes')
-
-
-def get_cloneable_themes():
-    d = get_theme_directory()
-    themes = os.listdir(d)
-    return [f for f in themes if os.path.isdir(os.path.join(d, f))]
-
-
 def open_in_browser(url, prompt_fallback=True, default=False):
     auto_open = client.settings.get('client', 'auto-open-in-browser', default)
     if not auto_open:
@@ -225,7 +213,7 @@ def watch(arguments):
 
 def clone(arguments):
     theme = arguments['<theme>']
-    choices = get_cloneable_themes()
+    choices = util.get_theme_bundle()
     if theme not in choices:
         msg = 'Given theme %s does not exist. The choices are:'
         util.logger.error(msg, theme)
@@ -236,7 +224,7 @@ def clone(arguments):
     if not directory:
         directory = theme
 
-    theme_path = os.path.join(get_theme_directory(), theme)
+    theme_path = os.path.join(util.get_theme_bundle_path(), theme)
     theme_path = '%s/*' % theme_path
 
     if subprocess.call(['mkdir', '-p', directory]):
@@ -251,7 +239,7 @@ def clone(arguments):
 
 
 def list_themes(arguments):
-    for theme in get_cloneable_themes():
+    for theme in util.get_theme_bundle():
         print theme
 
 

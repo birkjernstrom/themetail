@@ -25,3 +25,14 @@ def execute_hook(name, *params):
 
     params.insert(0, hook)
     return not subprocess.call(hook)
+
+
+def get_theme_bundle_path():
+    path = os.path.abspath(os.path.dirname(__file__))
+    return os.path.join(path, 'themes')
+
+
+def get_theme_bundle():
+    bundle = get_theme_bundle_path()
+    themes = os.listdir(bundle)
+    return [f for f in themes if os.path.isdir(os.path.join(bundle, f))]
