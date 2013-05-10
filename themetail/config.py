@@ -4,16 +4,11 @@
 
 import os
 import sys
+import logging
 import ConfigParser
 
+
 CONF_ENV_VARIABLE = 'THEMETAIL_CONF'
-
-SILENT = False
-
-
-def log_error(message, *args):
-    if not SILENT:
-        print message % args
 
 
 def get_config_path():
@@ -30,10 +25,10 @@ def load():
         if is_valid(config):
             return config
 
-        log_error('Aborting due to errors in themetail config')
+        logging.error('Aborting due to errors in themetail config')
         sys.exit(1)
 
-    log_error('No themetail configuration found at: %s' % path)
+    logging.error('No themetail configuration found at: %s' % path)
     sys.exit(1)
 
 
@@ -47,7 +42,10 @@ def load_file(filename):
 
 
 def load_fp(fp):
-    config = ConfigParser.SafeConfigParser()
+    config = ConfigParser.SafeConfigParser({
+        'auto-open-in-browser': False,
+        'subdomain': None,
+    })
     config.readfp(fp)
     return config
 
@@ -55,14 +53,14 @@ def load_fp(fp):
 def has_configured(config, section, keys):
     for key in keys:
         if not config.has_option(section, key):
-            msg = 'ERROR (Config): Missing key "%s" in section "%s"'
-            log_error(msg, key, section)
+            msg = 'Missing config key "%s" in section "%s"'
+            logging.error(msg, key, section)
             return False
 
         value = config.get(section, key)
         if not value:
-            msg = 'ERROR (Config): Empty value for key "%s" in section "%s"'
-            log_error(msg, key, section)
+            msg = 'Empty value for config key "%s" in section "%s"'
+            logging.error(msg, key, section)
             return False
     return True
 

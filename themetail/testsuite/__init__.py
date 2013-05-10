@@ -26,8 +26,6 @@ def run():
 
 
 def main():
-    config.SILENT = True
-
     envvar = config.CONF_ENV_VARIABLE
     backup = os.getenv(envvar)
     os.environ[envvar] = '~/.themetail_test.cnf'
