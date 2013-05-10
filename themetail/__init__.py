@@ -19,7 +19,6 @@ Usage:
 import os
 import sys
 import time
-import logging
 import webbrowser
 import subprocess
 
@@ -27,16 +26,19 @@ from docopt import docopt
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
+import util
 import client
 
 __author__ = 'Birk Nilson <birk@tictail.com>'
 __license__ = 'MIT'
 __version__ = '0.8.0'
 __all__ = [
+    'util', 'client',
     'list-themes', 'clone', 'watch', 'deploy', 'preview',
     'push', 'open_in_browser', 'get_cloneable_themes',
     'get_theme_directory', 'get_subdomain', 'Watcher',
     'ensure_valid_watch_directory', 'ensure_valid_watch_file',
+    'configure_logging',
 ]
 
 
@@ -80,12 +82,12 @@ class Watcher(FileSystemEventHandler):
 
     def on_deleted(self, event):
         if self.is_theme_event(event):
-            logging.error('Deleted the theme file')
+            util.logger.error('Deleted the theme file')
             self.observer.stop()
 
     def on_moved(self, event):
         if self.is_theme_event(event):
-            logging.error('Moving the theme file is not supported')
+            util.logger.error('Moving the theme file is not supported')
             self.observer.stop()
 
         if not self.moved_within_directory(event):
@@ -94,11 +96,11 @@ class Watcher(FileSystemEventHandler):
 
 def ensure_valid_watch_file(filename):
     if not filename.endswith('.html'):
-        logging.error('The main theme file does not end in .html')
+        util.logger.error('The main theme file does not end in .html')
         sys.exit(1)
 
     if not os.access(filename, os.R_OK):
-        logging.error('Cannot read the main theme file')
+        util.logger.error('Cannot read the main theme file')
         sys.exit(1)
 
 
@@ -114,7 +116,7 @@ def get_subdomain(arguments):
 
     subdomain = client.settings.get('client', 'subdomain')
     if not subdomain:
-        logging.error('Aborting. No subdomain specified.')
+        util.logger.error('Aborting. No subdomain specified.')
         sys.exit(1)
 
 
@@ -158,7 +160,7 @@ def push(arguments,
     store = client.get_store(subdomain)
     if not store:
         msg = 'Aborting. Could not retrieve the store data.'
-        logging.error(msg)
+        util.logger.error(msg)
         sys.exit(1)
 
     if preview:
@@ -166,7 +168,7 @@ def push(arguments,
     else:
         msg = 'Going to deploy theme %s for store "%s"'
 
-    logging.info(msg, filename, subdomain)
+    util.logger.info(msg, filename, subdomain)
 
     save = client.save_theme_from_file
     new_theme_id = save(store, filename, as_preview=preview)
@@ -179,11 +181,11 @@ def push(arguments,
         updated_url = client.get_store_url(subdomain)
 
     if preview:
-        logging.info('Awesomeness™. Preview updated!')
+        util.logger.info('Awesomeness™. Preview updated!')
     else:
-        logging.info('Epicness™. Deployed!')
+        util.logger.info('Epicness™. Deployed!')
 
-    logging.info('Changes can be found at: %s', updated_url)
+    util.logger.info('Changes can be found at: %s', updated_url)
     open_in_browser(updated_url,
                     prompt_fallback=browser_prompt,
                     default=browser_default)
@@ -225,7 +227,8 @@ def clone(arguments):
     theme = arguments['<theme>']
     choices = get_cloneable_themes()
     if theme not in choices:
-        logging.error('Given theme %s does not exist. The choices are:', theme)
+        msg = 'Given theme %s does not exist. The choices are:'
+        util.logger.error(msg, theme)
         list_themes(arguments)
         sys.exit(1)
 

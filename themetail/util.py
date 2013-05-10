@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 
 import os
 import sys
 import logging
 import subprocess
+
+logger = logging.getLogger('themetail')
+logger.setLevel(logging.DEBUG)
+logging_handler = logging.StreamHandler()
+formatter = logging.Formatter('[%(asctime)s] %(message)s')
+logging_handler.setFormatter(formatter)
+logger.addHandler(logging_handler)
 
 
 def execute_hook(name, *params):

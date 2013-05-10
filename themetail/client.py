@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 
 import os
 import json
-import logging
 
 import requests
 
@@ -100,11 +97,11 @@ def get_preview_url(subdomain, theme_id):
 
 def save_theme_from_file(store, theme_file, as_preview=True):
     if not os.path.isfile(theme_file):
-        logging.error('Aborting. Could not find theme build file.')
+        util.logger.error('Aborting. Could not find theme build file.')
         return False
 
     if not os.access(theme_file, os.R_OK):
-        logging.error('Aborting. Cannot read the theme build file.')
+        util.logger.error('Aborting. Cannot read the theme build file.')
         return False
 
     with open(theme_file, 'r') as build:
@@ -116,7 +113,7 @@ def save_theme(store, theme, as_preview=True):
     signin()
     hook = 'before_preview' if as_preview else 'before_deploy'
     if not util.execute_hook(hook):
-        logging.info('Instructed to abort by the %s hook.', hook)
+        util.logger.info('Instructed to abort by the %s hook.', hook)
         return False
 
     if as_preview:

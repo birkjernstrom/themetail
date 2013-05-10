@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 
 import os
 import sys
-import logging
 import ConfigParser
+
+import util
 
 
 CONF_ENV_VARIABLE = 'THEMETAIL_CONF'
@@ -25,10 +24,10 @@ def load():
         if is_valid(config):
             return config
 
-        logging.error('Aborting due to errors in themetail config')
+        util.logger.error('Aborting due to errors in themetail config')
         sys.exit(1)
 
-    logging.error('No themetail configuration found at: %s' % path)
+    util.logger.error('No themetail configuration found at: %s' % path)
     sys.exit(1)
 
 
@@ -54,13 +53,13 @@ def has_configured(config, section, keys):
     for key in keys:
         if not config.has_option(section, key):
             msg = 'Missing config key "%s" in section "%s"'
-            logging.error(msg, key, section)
+            util.logger.error(msg, key, section)
             return False
 
         value = config.get(section, key)
         if not value:
             msg = 'Empty value for config key "%s" in section "%s"'
-            logging.error(msg, key, section)
+            util.logger.error(msg, key, section)
             return False
     return True
 
