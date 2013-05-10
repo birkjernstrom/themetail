@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+# Hook executed before updating theme preview. Non-zero exit code will prevent the update.

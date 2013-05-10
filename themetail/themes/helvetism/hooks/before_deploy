@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+# Hook executed before deploy. Non-zero exit code will prevent the deploy.
