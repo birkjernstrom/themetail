@@ -12,6 +12,10 @@ settings = config.load()
 session = requests.Session()
 
 
+###############################################################################
+# HELPERS
+###############################################################################
+
 def url(path):
     return 'https://tictail.com%s' % path
 
@@ -29,6 +33,55 @@ def has_cookie(name):
 def is_authenticated():
     return has_cookie('tictail')
 
+
+def get_store_url(subdomain):
+    return 'http://%s.tictail.com' % subdomain
+
+
+def get_preview_url(subdomain, theme_id):
+    path = '/dashboard/store/%s/themes/preview/%s' % (subdomain, theme_id)
+    return url(path)
+
+
+def get_store(subdomain):
+    signin()
+    theme_edit_url = url('/dashboard/store/%s/themes/edit' % subdomain)
+    response = session.get(theme_edit_url)
+    if response.status_code != 200:
+        return None
+
+    # Begin hack
+    body = response.text
+    needle = 'ClientSession = {'
+    json_index_start = body.rindex(needle) + len(needle) - 1
+    json_index_end = body.index('};', json_index_start) + 1
+    data = body[json_index_start:json_index_end].strip()
+    data = json.loads(data)
+    # End hack
+
+    return data['storekeeper']['stores'][subdomain]
+
+
+###############################################################################
+# JSON-RPC 2.0
+###############################################################################
+
+def jsonrpc_encode(method, params):
+    data = dict(jsonrpc='2.0', method=method, params=params, id=None)
+    return json.dumps(data)
+
+
+def jsonrpc_post(payload):
+    data = dict(jsonrpc=payload, _xsrf=get_xsrf_token())
+    response = session.post(url('/apiv2/rpc/v1/'), data=data)
+    if response.status_code == 200:
+        return response.json()['result']
+    return {}
+
+
+###############################################################################
+# AUTHENTICATION
+###############################################################################
 
 def signin():
     if is_authenticated():
@@ -54,46 +107,9 @@ def get_xsrf_token():
     return session.cookies['_xsrf']
 
 
-def jsonrpc_encode(method, params):
-    data = dict(jsonrpc='2.0', method=method, params=params, id=None)
-    return json.dumps(data)
-
-
-def jsonrpc_post(payload):
-    data = dict(jsonrpc=payload, _xsrf=get_xsrf_token())
-    response = session.post(url('/apiv2/rpc/v1/'), data=data)
-    if response.status_code == 200:
-        return response.json()['result']
-    return {}
-
-
-def get_store(subdomain):
-    signin()
-    theme_edit_url = url('/dashboard/store/%s/themes/edit' % subdomain)
-    response = session.get(theme_edit_url)
-    if response.status_code != 200:
-        return None
-
-    # Begin hack
-    body = response.text
-    needle = 'ClientSession = {'
-    json_index_start = body.rindex(needle) + len(needle) - 1
-    json_index_end = body.index('};', json_index_start) + 1
-    data = body[json_index_start:json_index_end].strip()
-    data = json.loads(data)
-    # End hack
-
-    return data['storekeeper']['stores'][subdomain]
-
-
-def get_store_url(subdomain):
-    return 'http://%s.tictail.com' % subdomain
-
-
-def get_preview_url(subdomain, theme_id):
-    path = '/dashboard/store/%s/themes/preview/%s' % (subdomain, theme_id)
-    return url(path)
-
+###############################################################################
+# THEME SYNCHRONIZATION
+###############################################################################
 
 def save_theme_from_file(store, theme_file, as_preview=True):
     if not os.path.isfile(theme_file):
