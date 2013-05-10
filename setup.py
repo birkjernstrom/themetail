@@ -2,8 +2,6 @@
 
 from setuptools import setup, find_packages
 
-import themetail
-
 
 long_description = """
 Themetail - Empowers local development of Tictail themes.
@@ -17,7 +15,7 @@ along with their favourite gadgets.
 
 setup(
     name='Themetail',
-    version=themetail.__version__,
+    version='0.8.0',
     description='Themetail - Empowers local development of Tictail themes.',
     long_description=long_description,
     author='Birk Nilson',
