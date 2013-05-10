@@ -37,7 +37,6 @@ __all__ = [
     'list-themes', 'clone', 'watch', 'deploy', 'preview',
     'push', 'open_in_browser', 'get_subdomain', 'Watcher',
     'ensure_valid_watch_directory', 'ensure_valid_watch_file',
-    'configure_logging',
 ]
 
 
