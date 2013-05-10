@@ -19,4 +19,4 @@ def execute_hook(name, *params):
         sys.exit(1)
 
     params.insert(0, hook)
-    return subprocess.call(hook)
+    return not subprocess.call(hook)
