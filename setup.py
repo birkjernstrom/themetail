@@ -29,7 +29,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'themetail = themetail.main:main',
+            'themetail = themetail:main',
         ],
     },
     classifiers=[

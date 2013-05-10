@@ -242,7 +242,8 @@ def list_themes(arguments):
         print theme
 
 
-def main(arguments):
+def main():
+    arguments = docopt(__doc__)
     should_list_themes = arguments.get('list-themes', False)
     if should_list_themes:
         return list_themes(arguments)
@@ -270,5 +271,4 @@ def main(arguments):
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__)
-    main(arguments)
+    main()
