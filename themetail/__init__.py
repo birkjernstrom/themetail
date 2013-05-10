@@ -3,6 +3,11 @@
 """
 Themetail - Empowers local development of Tictail themes.
 
+An unofficial Tictail command-line tool for automatically synchronizing
+local copies of themes to your Tictail store. Along with some added flair
+to enable developers and designers to work in their preferred environment
+along with their favourite gadgets.
+
 Usage:
     themetail list-themes
     themetail clone <theme> [<directory>]
@@ -23,6 +28,16 @@ from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 import client
+
+__author__ = 'Birk Nilson <birk@tictail.com>'
+__license__ = 'MIT'
+__version__ = '0.8.0'
+__all__ = [
+    'list-themes', 'clone', 'watch', 'deploy', 'preview',
+    'push', 'open_in_browser', 'get_cloneable_themes',
+    'get_theme_directory', 'get_subdomain', 'Watcher',
+    'ensure_valid_watch_directory', 'ensure_valid_watch_file',
+]
 
 
 class Watcher(FileSystemEventHandler):
