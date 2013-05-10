@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>
+        {{store_name}}
+        {{! Add the label of the current navigation item on list pages }}
+        {{#list_page}}{{#navigation}}{{#is_current}}- {{label}}{{/is_current}}{{/navigation}}{{/list_page}}
+        {{! Add the product title on product pages }}
+        {{#product_page}}{{#product}}- {{title}}{{/product}}{{/product_page}}
+        {{! Add "About" on the about page }}
+        {{#about_page}}- About{{/about_page}}
+    </title>
+
+    <link href="//fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400,400italic" rel="stylesheet" type="text/css">
+    <link href="{{assets_url}}/shared/css/base.css" rel="stylesheet" type="text/css">
+    <style>
+    /* ******************************
+
+    GENERAL
+
+    ****************************** */
+
+    body {
+        padding: 40px 0;
+        background: url({{assets_url}}/159/bg.png) repeat #f1f1ea;
+        font-family: 'Sorts Mill Goudy', sans-serif;
+        font-size: 14px;
+        line-height: 1.3;
+    }
+
+    h1 {
+        margin: 0 0 20px;
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: bold;
+        color: #2b3034;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    h2 {
+        margin: 0 0 20px;
+        font-size: 20px;
+        line-height: 24px;
+        color: #2b3034;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    hr {
+        height: 1px;
+        border: 0;
+        background-color: #ededed;
+        color: #ededed;
+    }
+
+    a {
+        color: #ff4324;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .row {
+        font-size: 0;
+        line-height: 0;
+    }
+
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 14px;
+        line-height: 1;
+
+        /* Fix for Internet Explorer 7 */
+        *display: inline;
+        zoom: 1;
+    }
+
+    #container {
+        width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* ******************************
+
+    HEADER
+
+    ****************************** */
+
+    #header_container {
+        margin-bottom: 35px;
+        padding: 7px;
+        background-color: #fff;
+    }
+
+    header {
+        position: relative;
+        border: 1px solid #d2d2d2;
+        text-align: center;
+
+        /* Fix for Internet Explorer 7 */
+        z-index: 1;
+    }
+
+    #search_container {
+        position: absolute;
+        top: 7px;
+        left: 7px;
+    }
+
+    #logotype {
+        display: inline-block;
+        margin: 20px;
+        font-size: 44px;
+        line-height: 115px;
+        font-style: italic;
+        font-weight: normal;
+        color: #2b3034;
+        text-decoration: none;
+    }
+
+    #logotype:hover {
+        color: #2b3034;
+        text-decoration: none;
+    }
+
+    #logotype img {
+        vertical-align: middle;
+    }
+
+    /* ******************************
+
+    SEARCH
+
+    ****************************** */
+
+    #tictail_search input {
+        width: 118px;
+        margin: 0;
+        padding: 4px 4px 4px 22px;
+        background: url({{assets_url}}/159/magglas.png) no-repeat 3px 50% #fff;
+        border: 1px solid #d2d2d2;
+        font-family: 'Sorts Mill Goudy', sans-serif;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 400;
+        color: #908f94;
+        text-transform: uppercase;
+    }
+
+    #tictail_search input:focus {
+        outline: 0;
+        color: #000;
+    }
+
+    #tictail_search_results {
+        top: 27px;
+        left: 0;
+        background-color: #fff;
+        -webkit-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        border: 1px solid #d5d5d5;
+        font-size: 12px;
+        line-height: 15px;
+        color: #000;
+    }
+
+    #tictail_search_results .searching,
+    #tictail_search_results .no_results {
+        color: #666;
+    }
+
+    #tictail_search_results .item {
+        border-top: 1px solid #d5d5d5;
+    }
+
+    #tictail_search_results .title {
+        margin-top: 4px;
+        color: #000;
+    }
+
+    #tictail_search_results .price {
+        font-size: 11px;
+        line-height: 14px;
+        color: #908f94;
+    }
+
+    /* ******************************
+
+    NAVIGATION
+
+    ****************************** */
+
+    #main_navigation ul {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        border-top: 1px solid #d2d2d2;
+    }
+
+    #main_navigation li {
+        overflow: hidden;
+        max-width: 400px;
+        border-right: 1px solid #ededed;
+        font-size: 12px;
+        line-height: 14px;
+        font-style: italic;
+        letter-spacing: 1px;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    #main_navigation li:first-child {
+        border-left: 1px solid #ededed;
+    }
+
+    #main_navigation a {
+        display: inline-block;
+        padding: 14px 20px;
+    }
+
+    #main_navigation .selected a {
+        color: #000;
+    }
+
+    #main_navigation .child_navigation a {
+        color: #908f94;
+    }
+
+    /* ******************************
+
+    LIST PAGE
+
+    ****************************** */
+
+    .product_list li {
+        width: 292px;
+        margin: 0 1px 1px 0;
+        padding: 20px;
+        background-color: #fff;
+        text-align: center;
+    }
+
+    .product_list a {
+        display: block;
+    }
+
+    .product_list .image_container {
+        height: 300px;
+        overflow: hidden;
+        line-height: 300px;
+    }
+
+    .product_list .image_container img {
+        max-width: 292px;
+        vertical-align: middle;
+    }
+
+    .product_list h2,
+    .product_list h3 {
+        overflow: hidden;
+        margin: 12px 0 0 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #000;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .product_list .price {
+        line-height: 14px;
+        color: #908f94;
+    }
+
+    .product_list .currency {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .product_list .out_of_stock {
+        font-style: italic;
+        color: #ff4324;
+    }
+
+    /* ******************************
+
+    PRODUCT PAGE
+
+    ****************************** */
+
+    #product_info {
+        padding: 20px 0 40px 20px;
+        background-color: #fff;
+    }
+
+    #product_info .image_container {
+        width: 460px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #product_info .image_container img {
+        max-width: 460px;
+    }
+
+    #product_info .details_container {
+        width: 500px;
+        margin-left: 20px;
+        padding-top: 20px;
+        text-align: center;
+    }
+
+    #product_info h1 {
+        margin: 0;
+        padding: 0 20px 20px;
+    }
+
+    #product_info .description,
+    #product_info .price {
+        margin: 40px 40px 20px;
+        line-height: 20px;
+    }
+
+    #product_info .currency {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    #product_info .variations_container {
+        margin: 20px 0;
+    }
+
+    #product_info .add_to_cart {
+        width: 300px;
+        margin: 40px auto 20px;
+        padding: 10px;
+        background-color: #f7f7f6;
+    }
+
+    #product_info .out_of_stock {
+        margin: 40px 0 30px;
+        font-style: italic;
+        color: #ff4324;
+    }
+
+    #product_info .tictail_social_buttons {
+        margin: 30px 0;
+    }
+
+    #product_info .terms {
+        margin: 20px 0;
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    #product_info .terms .link {
+        margin-top: 3px;
+    }
+
+    #product_info .terms a {
+        color: #908f94;
+    }
+
+    #related_products {
+        margin-top: 35px;
+    }
+
+    #related_products h2 {
+        text-align: center;
+    }
+
+    /* ******************************
+
+    "ADD TO CART" BUTTON
+
+    ****************************** */
+
+    .tictail_add_to_cart_button {
+        width: 100%;
+        margin: 0;
+        padding: 14px 0;
+        background-color: #fff;
+        border: 1px solid #d2d2d2;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: bold;
+        color: #000;
+        text-align: center;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .tictail_add_to_cart_button:hover {
+        color: #ff4324;
+    }
+
+    /* ******************************
+
+    GENERIC PAGES
+
+    ****************************** */
+
+    .page_container {
+        padding: 30px 30px 40px;
+        background-color: #fff;
+    }
+
+    .page_container h1 {
+        margin: 0 0 30px;
+        padding: 0 0 4px;
+        border-bottom: 1px solid #ededed;
+    }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="{{assets_url}}/shared/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="container">
+    <div id="header_container">
+        <header>
+            <div id="search_container">
+                {{search}}
+            </div>
+
+            <a id="logotype" href="{{store_url}}">
+                {{#logotype}}
+                    <img src="{{url-300}}" alt="{{store_name}}">
+                {{/logotype}}
+                {{#no_logotype}}
+                    {{store_name}}
+                {{/no_logotype}}
+            </a>
+
+            <nav id="main_navigation">
+                <ul class="row">
+                    {{! Highlight "All items" if we are on a list page and no navigation item is selected }}
+                    <li class="column {{#list_page}}{{#no_current_navigation}}selected{{/no_current_navigation}}{{/list_page}}">
+                        <a href="{{store_url}}/products">
+                            All items
+                        </a>
+                    </li>
+
+                    {{#navigation}}
+                    <li class="column {{#is_current}}selected{{/is_current}}">
+                        <a href="{{url}}">
+                            {{label}}
+                        </a>
+                    </li>
+                    {{/navigation}}
+
+                    {{#store_blog_url}}
+                    <li class="column">
+                        <a href="{{store_blog_url}}" target="_blank">
+                            Blog
+                        </a>
+                    </li>
+                    {{/store_blog_url}}
+
+                    <li class="column {{#about_page}}selected{{/about_page}}">
+                        <a href="{{store_url}}/page/about">
+                            About
+                        </a>
+                    </li>
+                </ul>
+
+                {{! By using #is_current within a #navigation block we can find the currently selected navigation item }}
+                {{#navigation}}
+                {{#is_current}}
+                {{! Render the submenu if it has any navigation items }}
+                {{#children?}}
+                <ul class="child_navigation row">
+                    {{#children}}
+                    <li class="column">
+                        <a href="{{url}}">
+                            {{label}}
+                        </a>
+                    </li>
+                    {{/children}}
+                </ul>
+                {{/children?}}
+                {{/is_current}}
+                {{/navigation}}
+            </nav>
+        </header>
+    </div>
+
+
+{{#list_page}}
+{{! This block is rendered when displaying a list of products }}
+
+    <section id="products">
+        {{! Output a list if we have any products }}
+        {{#products?}}
+        <ul class="product_list row">
+            {{#products}}
+            <li class="column">
+                <a href="{{url}}">
+                    <div class="image_container">
+                        {{#primary_image}}
+                        <img src="{{url-300}}" alt="{{title}}">
+                        {{/primary_image}}
+                    </div>
+
+                    <h2>{{title}}</h2>
+                    {{#in_stock}}
+                    <span class="price">{{price_with_currency}}</span>
+                    {{/in_stock}}
+                    {{#out_of_stock}}
+                    <span class="price out_of_stock">Out of stock</span>
+                    {{/out_of_stock}}
+                </a>
+            </li>
+            {{/products}}
+        </ul>
+        {{/products?}}
+    </section>
+
+{{/list_page}}
+
+
+{{#product_page}}
+{{! This block is rendered when displaying a single product }}
+
+    <article id="product" itemscope itemtype="http://schema.org/Product">
+        {{#product}}
+        <div id="product_info" class="row">
+            <figure class="image_container column">
+                {{#slideshow-500}}{{/slideshow-500}}
+            </figure>
+
+            <section class="details_container column">
+                <h1 itemprop="name">{{title}}</h1>
+
+                <hr>
+
+                <div class="description html_content" itemprop="description">
+                    {{description}}
+                </div>
+
+                <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                    <span itemprop="price">{{price_with_currency}}</span>
+
+                    {{! This is meta data for search engines etc. }}
+                    <meta itemprop="priceCurrency" content="{{currency_code}}">
+                    {{#in_stock}}
+                    <link itemprop="availability" href="http://schema.org/InStock">
+                    {{/in_stock}}
+                    {{#out_of_stock}}
+                    <link itemprop="availability" href="http://schema.org/OutOfStock">
+                    {{/out_of_stock}}
+                </div>
+
+                <hr>
+
+                {{! The #add_to_cart block is only rendered if the product is in stock }}
+                {{#add_to_cart}}
+                <div class="variations_container">
+                    {{#variations_select}}{{/variations_select}}
+                </div>
+
+                <div class="add_to_cart">
+                    {{#add_to_cart_button}}
+                    Add to cart
+                    {{/add_to_cart_button}}
+                </div>
+                {{/add_to_cart}}
+
+                {{! This block will be rendered instead of the #add_to_cart block when the product is out of stock }}
+                {{#out_of_stock}}
+                <div class="out_of_stock">
+                    This product is out of stock
+                </div>
+                {{/out_of_stock}}
+
+                {{social_buttons}}
+
+                <div class="terms">
+                    <div class="link">
+                        {{#return_policy}}
+                        Return Policy
+                        {{/return_policy}}
+                    </div>
+                    <div class="link">
+                        {{#terms}}
+                        Terms &amp; Conditions
+                        {{/terms}}
+                    </div>
+                </div>
+            </section>
+        </div>
+        {{/product}}
+
+        {{! Render a list of related products if there are any }}
+        {{#related_products?}}
+        <aside id="related_products">
+            <h2>You might also like...</h2>
+
+            <ul class="product_list row">
+                {{#related_products}}
+                <li class="column">
+                    <a href="{{url}}">
+                        <div class="image_container">
+                            {{#primary_image}}
+                            <img src="{{url-300}}" alt="{{title}}">
+                            {{/primary_image}}
+                        </div>
+
+                        <h3>{{title}}</h3>
+                        {{#in_stock}}
+                        <span class="price">{{price_with_currency}}</span>
+                        {{/in_stock}}
+                        {{#out_of_stock}}
+                        <span class="price out_of_stock">Out of stock</span>
+                        {{/out_of_stock}}
+                    </a>
+                </li>
+                {{/related_products}}
+            </ul>
+        </aside>
+        {{/related_products?}}
+    </article>
+
+{{/product_page}}
+
+
+{{#about_page}}
+
+    <article id="about" class="page_container">
+        <h1>About</h1>
+
+        <div class="html_content">
+            {{store_description}}
+        </div>
+    </article>
+
+{{/about_page}}
+
+</div>
+
+</body>
+</html>
+
+<!--
+Want to create your own Tictail theme?
+Check out the documentation at https://tictail.com/docs
+-->
+

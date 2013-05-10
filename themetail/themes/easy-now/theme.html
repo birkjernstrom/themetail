@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>
+        {{store_name}}
+        {{! Add the label of the current navigation item on list pages }}
+        {{#list_page}}{{#navigation}}{{#is_current}}- {{label}}{{/is_current}}{{/navigation}}{{/list_page}}
+        {{! Add the product title on product pages }}
+        {{#product_page}}{{#product}}- {{title}}{{/product}}{{/product_page}}
+        {{! Add "About" on the about page }}
+        {{#about_page}}- About{{/about_page}}
+    </title>
+
+    <link href="//fonts.googleapis.com/css?family=Crimson+Text:600" rel="stylesheet" type="text/css">
+    <link href="{{assets_url}}/shared/css/base.css" rel="stylesheet" type="text/css">
+    <style>
+    /* ******************************
+
+    GENERAL
+
+    ****************************** */
+
+    body {
+        padding: 30px 20px;
+        background-color: #fff;
+        font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+        font-size: 12px;
+        line-height: 1.2;
+        color: #222;
+    }
+
+    h1 {
+        margin: 0 0 10px;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: bold;
+    }
+
+    h2 {
+        margin: 0 0 10px;
+        font-size: 11px;
+        line-height: 15px;
+        font-weight: normal;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #1874b2;
+        text-decoration: underline;
+    }
+
+    .row {
+        font-size: 0;
+        line-height: 0;
+    }
+
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 14px;
+        line-height: 1.2;
+
+        /* Fix for Internet Explorer 7 */
+        *display: inline;
+        zoom: 1;
+    }
+
+    #container {
+        width: 898px;
+        margin: 0 auto;
+    }
+
+    /* ******************************
+
+    HEADER
+
+    ****************************** */
+
+    header {
+        margin-bottom: 40px;
+        padding: 20px 0;
+        text-align: center;
+
+        /* Fix for Internet Explorer 7 */
+        position: relative;
+        z-index: 1;
+    }
+
+    #logotype {
+        font-family: 'Crimson Text', serif;
+        font-size: 72px;
+        line-height: 78px;
+        font-weight: 600;
+        color: #222;
+        letter-spacing: -1px;
+        text-transform: uppercase;
+    }
+
+    #logotype:hover {
+        text-decoration: none;
+    }
+
+    /* ******************************
+
+    NAVIGATION
+
+    ****************************** */
+
+    #main_navigation {
+        width: 147px;
+    }
+
+    #main_navigation li {
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 17px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    #main_navigation li:first-child {
+        margin-top: 0;
+    }
+
+    #main_navigation a:hover {
+        color: #1874b2;
+        text-decoration: underline;
+    }
+
+    #main_navigation .selected > a {
+        text-decoration: underline;
+    }
+
+    #main_navigation .child_navigation li {
+        margin-top: 4px;
+        font-size: 11px;
+        line-height: 14px;
+        font-weight: normal;
+        color: #777;
+    }
+
+    #search_container {
+        margin-top: 20px;
+    }
+
+    #main_navigation .payment_alternatives {
+        margin-top: 40px;
+    }
+
+    #main_navigation .payment_alternatives img {
+        display: block;
+        margin-top: 10px;
+        max-width: 100px;
+    }
+
+    /* ******************************
+
+    SEARCH
+
+    ****************************** */
+
+    #tictail_search input {
+        width: 118px;
+        margin: 0;
+        padding: 4px 4px 4px 22px;
+        background: url({{assets_url}}/1/magglas.png) no-repeat 3px 50% #fff;
+        border: 1px solid #ddd;
+        font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+        color: #999;
+    }
+
+    #tictail_search input:focus {
+        outline: 0;
+        color: #333;
+    }
+
+    #tictail_search_results {
+        top: 25px;
+        left: 0;
+        background-color: #fff;
+        -webkit-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        border: 1px solid #ddd;
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    #tictail_search_results .searching,
+    #tictail_search_results .no_results {
+        color: #999;
+    }
+
+    #tictail_search_results .item {
+        border-top: 1px solid #ddd;
+    }
+
+    #tictail_search_results .result {
+        color: #333;
+        text-decoration: none;
+    }
+
+    #tictail_search_results .result:hover {
+        color: #1874b2;
+        text-decoration: none;
+    }
+
+    #tictail_search_results .title {
+        margin-top: 4px;
+        font-weight: bold;
+    }
+
+    #tictail_search_results .price {
+        font-size: 11px;
+        line-height: 14px;
+        color: #666;
+    }
+
+    /* ******************************
+
+    LIST PAGE
+
+    ****************************** */
+
+    #products {
+        width: 731px;
+        margin-left: 20px;
+    }
+
+    .product_list {
+        margin-right: -20px;
+    }
+
+    .product_list li {
+        width: 230px;
+        margin: 0 20px 15px 0;
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    .product_list a {
+        display: block;
+        text-decoration: none;
+        color: #666;
+    }
+
+    .product_list .image_container {
+        height: 230px;
+        overflow: hidden;
+        background-color: white;
+        line-height: 230px;
+        text-align: center;
+    }
+
+    .product_list .image_container img {
+        max-width: 230px;
+        vertical-align: middle;
+    }
+
+    .product_list .image_container img:hover {
+        opacity: 0.9;
+    }
+
+    .product_list h2,
+    .product_list h3 {
+        overflow: hidden;
+        margin: 5px 0 0 0;
+        font-size: 11px;
+        line-height: 15px;
+        font-weight: normal;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .product_list .out_of_stock {
+        font-style: italic;
+        color: #ff4324;
+    }
+
+    /* ******************************
+
+    PRODUCT PAGE
+
+    ****************************** */
+
+    #product {
+        width: 731px;
+        margin-left: 20px;
+    }
+
+    #product_info .image_container {
+        width: 480px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #product_info .image_container img {
+        max-width: 480px;
+    }
+
+    #product_info .details_container {
+        width: 231px;
+        margin-left: 20px;
+        font-size: 11px;
+        line-height: 15px;
+        color: #666;
+    }
+
+    #product_info h1 {
+        margin: 0 0 3px 0;
+    }
+
+    #product_info .price {
+        font-size: 12px;
+        line-height: 16px;
+        color: #222;
+    }
+
+    #product_info .currency {
+        margin-left: -1px;
+        font-size: 9px;
+    }
+
+    #product_info .klarna_monthly_payment {
+        margin: 3px 0 10px;
+    }
+
+    #product_info .klarna_monthly_payment a {
+        color: #1874b2;
+    }
+
+    #product_info .description {
+        margin: 20px 0;
+    }
+
+    #product_info .variations_container {
+        margin: 20px 0;
+    }
+
+    #product_info .add_to_cart {
+        margin: 20px 0;
+    }
+
+    #product_info .out_of_stock {
+        margin: 30px 0;
+        font-style: italic;
+        color: #ff4324;
+    }
+
+    #product_info .tictail_social_buttons {
+        margin: 30px 0;
+    }
+
+    #product_info .terms {
+        margin-top: 30px;
+    }
+
+    #product_info .terms li {
+        margin: 0 0 2px 0;
+        font-size: 9px;
+        line-height: 12px;
+        font-weight: normal;
+        text-transform: uppercase;
+    }
+
+    #product_info .terms a {
+        color: #999;
+    }
+
+    #related_products {
+        margin-top: 20px;
+    }
+
+    #related_products h2 {
+        margin: 0 0 20px 0;
+        padding: 0 0 3px 0;
+        border-bottom: 1px solid #ddd;
+        font-size: 11px;
+        line-height: 16px;
+        font-weight: normal;
+        color: #777;
+    }
+
+    /* ******************************
+
+    "ADD TO CART" BUTTON
+
+    ****************************** */
+
+    .tictail_add_to_cart_button {
+        min-width: 70px;
+        padding: 8px 12px;
+        background-color: #222;
+        border: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        font-size: 11px;
+        line-height: 14px;
+        color: #f6f6f6;
+        cursor: pointer;
+    }
+
+    .tictail_add_to_cart_button:hover{
+        background-color: #1874b2;
+    }
+
+    .tictail_add_to_cart_button:active{
+        background-color: #3595d5;
+    }
+
+    /* ******************************
+
+    GENERIC PAGES
+
+    ****************************** */
+
+    .page_container {
+        width: 731px;
+        margin-left: 20px;
+        font-size: 11px;
+        line-height: 15px;
+        color: #666;
+    }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="{{assets_url}}/shared/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="container">
+    <header>
+        <a id="logotype" href="{{store_url}}">
+            {{#logotype}}
+                <img src="{{url-300}}" alt="{{store_name}}">
+            {{/logotype}}
+            {{#no_logotype}}
+                {{store_name}}
+            {{/no_logotype}}
+        </a>
+    </header>
+
+    <div class="row">
+        <nav id="main_navigation" class="column">
+            <ul>
+                {{! Highlight "All items" if we are on a list page and no navigation item is selected }}
+                <li class="{{#list_page}}{{#no_current_navigation}}selected{{/no_current_navigation}}{{/list_page}}">
+                    <a href="{{store_url}}/products">
+                        All items
+                    </a>
+                </li>
+
+                {{#navigation}}
+                <li class="{{#is_current}}selected{{/is_current}}">
+                    <a href="{{url}}">
+                        {{label}}
+                    </a>
+                    {{#is_current}}
+                    {{! Render the submenu if it has any navigation items }}
+                    {{#children?}}
+                    <ul class="child_navigation">
+                        {{#children}}
+                        <li>
+                            <a href="{{url}}">
+                                {{label}}
+                            </a>
+                        </li>
+                        {{/children}}
+                    </ul>
+                    {{/children?}}
+                    {{/is_current}}
+                </li>
+                {{/navigation}}
+
+                {{#store_blog_url}}
+                <li>
+                    <a href="{{store_blog_url}}" target="_blank">
+                        Blog
+                    </a>
+                </li>
+                {{/store_blog_url}}
+
+                <li class="{{#about_page}}selected{{/about_page}}">
+                    <a href="{{store_url}}/page/about">
+                        About
+                    </a>
+                </li>
+            </ul>
+
+            <div id="search_container">
+                {{search}}
+            </div>
+
+            {{! Render logotypes of all available payment alternatives }}
+            {{#payment_alternatives?}}
+            <div class="payment_alternatives">
+                {{#payment_alternatives}}
+                <img src="{{logo}}" alt="{{type}}">
+                {{/payment_alternatives}}
+            </div>
+            {{/payment_alternatives?}}
+        </nav>
+
+
+{{#list_page}}
+{{! This block is rendered when displaying a list of products }}
+
+        <section id="products" class="column">
+            {{! Output a list if we have any products }}
+            {{#products?}}
+            <ul class="product_list row">
+                {{#products}}
+                <li class="column">
+                    <a href="{{url}}">
+                        <div class="image_container">
+                            {{#primary_image}}
+                            <img src="{{url-300}}" alt="{{title}}">
+                            {{/primary_image}}
+                        </div>
+
+                        <h2>{{title}}</h2>
+                        {{#in_stock}}
+                        <span class="price">{{price_with_currency}}</span>
+                        {{/in_stock}}
+                        {{#out_of_stock}}
+                        <span class="price out_of_stock">Out of stock</span>
+                        {{/out_of_stock}}
+                    </a>
+                </li>
+                {{/products}}
+            </ul>
+            {{/products?}}
+        </section>
+
+{{/list_page}}
+
+
+{{#product_page}}
+{{! This block is rendered when displaying a single product }}
+
+        <article id="product" class="column" itemscope itemtype="http://schema.org/Product">
+            {{#product}}
+            <div id="product_info" class="row">
+                <figure class="image_container column">
+                    {{#slideshow-500}}{{/slideshow-500}}
+                </figure>
+
+                <section class="details_container column">
+                    <h1 itemprop="name">{{title}}</h1>
+
+                    <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <span itemprop="price">{{price_with_currency}}</span>
+
+                        {{! This is meta data for search engines etc. }}
+                        <meta itemprop="priceCurrency" content="{{currency_code}}">
+                        {{#in_stock}}
+                        <link itemprop="availability" href="http://schema.org/InStock">
+                        {{/in_stock}}
+                        {{#out_of_stock}}
+                        <link itemprop="availability" href="http://schema.org/OutOfStock">
+                        {{/out_of_stock}}
+                    </div>
+
+                    {{#klarna?}}
+                    <div class="klarna_monthly_payment">
+                        {{#klarna}}
+                        <a href="https://online.klarna.com/account_se.yaws?eid={{eid}}" target="_blank" class="klarna_popup">
+                            Delbetala från {{price_with_currency}} per månad
+                        </a>
+                        {{/klarna}}
+                    </div>
+                    {{/klarna?}}
+
+                    <div class="description html_content" itemprop="description">
+                        {{description}}
+                    </div>
+
+                    {{! The #add_to_cart block is only rendered if the product is in stock }}
+                    {{#add_to_cart}}
+                    <div class="variations_container">
+                        {{#variations_select}}{{/variations_select}}
+                    </div>
+
+                    <div class="add_to_cart">
+                        {{#add_to_cart_button}}
+                        Add to cart
+                        {{/add_to_cart_button}}
+                    </div>
+                    {{/add_to_cart}}
+
+                    {{! This block will be rendered instead of the #add_to_cart block when the product is out of stock }}
+                    {{#out_of_stock}}
+                    <div class="out_of_stock">
+                        This product is out of stock
+                    </div>
+                    {{/out_of_stock}}
+
+                    {{social_buttons}}
+
+                    <ul class="terms">
+                        <li>
+                            {{#return_policy}}
+                            Return Policy
+                            {{/return_policy}}
+                        </li>
+                        <li>
+                            {{#terms}}
+                            Terms &amp; Conditions
+                            {{/terms}}
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            {{/product}}
+
+            {{! Render a list of related products if there are any }}
+            {{#related_products?}}
+            <aside id="related_products">
+                <h2>You might also like...</h2>
+
+                <ul class="product_list row">
+                    {{#related_products}}
+                    <li class="column">
+                        <a href="{{url}}">
+                            <div class="image_container">
+                                {{#primary_image}}
+                                <img src="{{url-300}}" alt="{{title}}">
+                                {{/primary_image}}
+                            </div>
+
+                            <h3>{{title}}</h3>
+                            {{#in_stock}}
+                            <span class="price">{{price_with_currency}}</span>
+                            {{/in_stock}}
+                            {{#out_of_stock}}
+                            <span class="price out_of_stock">Out of stock</span>
+                            {{/out_of_stock}}
+                        </a>
+                    </li>
+                    {{/related_products}}
+                </ul>
+            </aside>
+            {{/related_products?}}
+        </article>
+
+{{/product_page}}
+
+
+{{#about_page}}
+
+    <article id="about" class="column page_container">
+        <h1>About</h1>
+
+        <div class="html_content">
+            {{store_description}}
+        </div>
+    </article>
+
+{{/about_page}}
+
+    </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script>
+$('a.klarna_popup').click(function(e) {
+    e.preventDefault();
+    var win = window.open($(this).attr('href'), 'klarnaPopupWindow', 'width=600,height=500,menubar=no,location=no,toolbar=no,status=no,directories=no');
+    win.focus();
+});
+</script>
+
+</body>
+</html>
+
+<!--
+Want to create your own Tictail theme?
+Check out the documentation at https://tictail.com/docs
+-->
+

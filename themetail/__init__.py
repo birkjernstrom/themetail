@@ -4,6 +4,8 @@
 Themetail - Empowers local development of Tictail themes.
 
 Usage:
+    themetail list-themes
+    themetail clone <theme> [<directory>]
     themetail watch [FILE] [DIR] [--subdomain=<example>]
     themetail preview [FILE] [DIR] [--subdomain=<example>]
     themetail deploy [FILE] [DIR] [--subdomain=<example>]
@@ -14,6 +16,7 @@ import sys
 import time
 import logging
 import webbrowser
+import subprocess
 
 from docopt import docopt
 from watchdog.events import FileSystemEventHandler
@@ -74,6 +77,21 @@ class Watcher(FileSystemEventHandler):
             return
 
 
+def ensure_valid_watch_file(filename):
+    if not filename.endswith('.html'):
+        logging.error('The main theme file does not end in .html')
+        sys.exit(1)
+
+    if not os.access(filename, os.R_OK):
+        logging.error('Cannot read the main theme file')
+        sys.exit(1)
+
+
+def ensure_valid_watch_directory(directory):
+    theme_path = os.path.join(directory, 'theme.html')
+    ensure_valid_watch_file(theme_path)
+
+
 def get_subdomain(arguments):
     subdomain = arguments['--subdomain']
     if subdomain:
@@ -90,6 +108,17 @@ def get_directory(arguments):
     if directory:
         return directory
     return os.getcwd()
+
+
+def get_theme_directory():
+    path = os.path.abspath(os.path.dirname(__file__))
+    return os.path.join(path, 'themes')
+
+
+def get_cloneable_themes():
+    d = get_theme_directory()
+    themes = os.listdir(d)
+    return [f for f in themes if os.path.isdir(os.path.join(d, f))]
 
 
 def open_in_browser(url, prompt_fallback=True, default=False):
@@ -153,21 +182,6 @@ def deploy(arguments, filename):
     return push(arguments, filename, preview=False)
 
 
-def ensure_valid_watch_file(filename):
-    if not filename.endswith('.html'):
-        logging.error('The main theme file does not end in .html')
-        sys.exit(1)
-
-    if not os.access(filename, os.R_OK):
-        logging.error('Cannot read the main theme file')
-        sys.exit(1)
-
-
-def ensure_valid_watch_directory(directory):
-    theme_path = os.path.join(directory, 'theme.html')
-    ensure_valid_watch_file(theme_path)
-
-
 def watch(arguments):
     path = get_directory(arguments)
     filename = arguments['FILE']
@@ -192,7 +206,39 @@ def watch(arguments):
     observer.join()
 
 
+def clone(arguments):
+    theme = arguments['<theme>']
+    choices = get_cloneable_themes()
+    if theme not in choices:
+        logging.error('Given theme %s does not exist. The choices are:', theme)
+        list_themes(arguments)
+        sys.exit(1)
+
+    directory = arguments['<directory>']
+    if not directory:
+        directory = theme
+
+    theme_path = os.path.join(get_theme_directory(), theme)
+    theme_path = '%s/*' % theme_path
+
+    subprocess.call(['mkdir', '-p', directory])
+    subprocess.call(['cp', theme_path, directory])
+
+
+def list_themes(arguments):
+    for theme in get_cloneable_themes():
+        print theme
+
+
 def main(arguments):
+    should_list_themes = arguments.get('list-themes', False)
+    if should_list_themes:
+        return list_themes(arguments)
+
+    should_clone = arguments.get('clone', False)
+    if should_clone:
+        return clone(arguments)
+
     should_watch = arguments.get('watch', False)
     if should_watch:
         return watch(arguments)

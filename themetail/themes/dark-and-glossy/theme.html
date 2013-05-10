@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>
+        {{store_name}}
+        {{! Add the label of the current navigation item on list pages }}
+        {{#list_page}}{{#navigation}}{{#is_current}}- {{label}}{{/is_current}}{{/navigation}}{{/list_page}}
+        {{! Add the product title on product pages }}
+        {{#product_page}}{{#product}}- {{title}}{{/product}}{{/product_page}}
+        {{! Add "About" on the about page }}
+        {{#about_page}}- About{{/about_page}}
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href="{{assets_url}}/771/css/anythingslider.css" rel="stylesheet" type="text/css">
+    <link href="{{assets_url}}/shared/css/base.css" rel="stylesheet" type="text/css">
+    <style>
+    /* ******************************
+
+    GENERAL
+
+    ****************************** */
+
+    body {
+        padding: 20px 0;
+        background: url({{assets_url}}/771/images/darkglossybg.png) repeat #1e1b1b;
+        font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 12px;
+        line-height: 1.2;
+        color: #fff;
+    }
+
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #888;
+    }
+
+    h1 {
+        margin: 0 0 20px;
+        font-size: 30px;
+        line-height: 38px;
+        font-weight: bold;
+    }
+
+    h2 {
+        margin: 0 0 15px;
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: bold;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    .row {
+        font-size: 0;
+        line-height: 0;
+    }
+
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        font-size: 14px;
+        line-height: 1;
+
+        /* Fix for Internet Explorer 7 */
+        *display: inline;
+        zoom: 1;
+    }
+
+    #container {
+        max-width: 1140px;
+        min-width: 755px;
+        margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 768px) {
+        #container {
+            min-width: 0;
+        }
+    }
+
+    @media only screen and (max-width: 320px) {
+        h1 {
+            margin: 0 0 10px;
+            font-size: 21px;
+            line-height: 27px;
+        }
+    }
+
+    /* ******************************
+
+    HEADER
+
+    ****************************** */
+
+    header {
+        margin: 30px 0 50px;
+        text-align: center;
+
+        /* Fix for Internet Explorer 7 */
+        position: relative;
+        z-index: 1;
+    }
+
+    #logotype {
+        font-size: 56px;
+        line-height: 64px;
+        font-weight: 100;
+        color: #fff;
+        letter-spacing: -2px;
+        text-transform: uppercase;
+    }
+
+    @media only screen and (max-width: 768px) {
+        header {
+            margin-top: 10px;
+        }
+    }
+
+    @media only screen and (max-width: 575px) {
+        #logotype {
+            font-size: 40px;
+            line-height: 47px;
+        }
+    }
+
+    @media only screen and (max-width: 320px) {
+        header {
+            margin: 0 0 20px;
+        }
+
+        #logotype {
+            font-size: 30px;
+            line-height: 36px;
+        }
+    }
+
+    /* ******************************
+
+    NAVIGATION
+
+    ****************************** */
+
+    #main_navigation {
+        position: relative;
+        padding: 0 20px;
+        font-size: 0;
+        line-height: 0;
+    }
+
+    #main_navigation > ul {
+        display: inline-block;
+        vertical-align: top;
+
+        /* Fix for Internet Explorer 7 */
+        *display: inline;
+        zoom: 1;
+    }
+
+    #main_navigation li {
+        position: relative;
+        max-width: 400px;
+        margin: 8px 10px 0;
+        padding-bottom: 8px;
+        font-size: 14px;
+        line-height: 17px;
+        font-weight: bold;
+        color: #fff;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #main_navigation .selected > a {
+        color: #888;
+    }
+
+    #main_navigation .drop_down {
+        position: absolute;
+        top: 24px;
+        left: -10px;
+        z-index: 500;
+        display: none;
+        min-width: 140px;
+        padding: 14px 7px 10px 10px;
+        -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+        -moz-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+        background-color: #363434;
+        background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #363434), color-stop(100%, #232222));
+        background: -webkit-linear-gradient(-45deg, #363434 0%, #232222 100%);
+        background: -moz-linear-gradient(-45deg, #363434 0%, #232222 100%);
+        background: -ms-linear-gradient(-45deg, #363434 0%, #232222 100%);
+        background: -o-linear-gradient(-45deg, #363434 0%, #232222 100%);
+        background: linear-gradient(-45deg, #363434 0%, #232222 100%);
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        text-align: left;
+    }
+
+    #main_navigation li:hover .drop_down {
+        display: block;
+    }
+
+    #main_navigation .drop_down:before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 30px;
+        z-index: 500;
+        background: url({{assets_url}}/771/images/north-arrow.png) no-repeat;
+        width: 13px;
+        height: 6px;
+    }
+
+    #main_navigation .drop_down li {
+        margin: 0 9px 6px 6px;
+        padding: 0;
+        text-shadow: rgba(0, 0, 0, 0.75) 0 1px 0;
+    }
+
+    #store_menu_button {
+        display: none;
+    }
+
+    #store_menu_button .tablet_label,
+    #store_menu_button .mobile_label {
+        display: none;
+    }
+
+    #store_menu {
+        white-space: normal;
+    }
+
+    #store_menu .section {
+        width: 125px;
+        margin: 0 9px 10px 0;
+    }
+
+    #store_menu .child_navigation {
+        margin-top: 10px;
+    }
+
+    #store_menu .child_navigation li {
+        max-width: 125px;
+        margin: 4px 0;
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    #store_menu .store_link {
+        display: none;
+    }
+
+    #search_container {
+        position: relative;
+        display: inline-block;
+        margin: 8px 10px;
+        vertical-align: top;
+        font-size: 14px;
+        line-height: 17px;
+
+        /* Fix for Internet Explorer 7 */
+        *display: inline;
+        zoom: 1;
+    }
+
+    #search_container input {
+        position: relative;
+        top: -2px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        #main_navigation {
+            padding: 0 10px 8px;
+            border-bottom: 1px solid #030202;
+            text-align: left;
+        }
+
+        #main_navigation:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: #2f2c2c;
+        }
+
+        #main_navigation .navigation_item {
+            display: none;
+        }
+
+        #main_navigation .drop_down:before {
+            left: 21px;
+        }
+
+        #main_navigation #store_menu_button {
+            display: inline-block;
+        }
+
+        #store_menu_button .tablet_label {
+            display: inline;
+        }
+
+        #store_menu {
+            width: 402px;
+        }
+
+        #search_container {
+            float: right;
+        }
+    }
+
+    @media only screen and (max-width: 575px) {
+        #store_menu {
+            width: 268px;
+        }
+    }
+
+    @media only screen and (max-width: 320px) {
+        #main_navigation {
+            padding: 0;
+            border-top: 1px solid #030202;
+        }
+
+        #main_navigation:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: #2f2c2c;
+        }
+
+        #main_navigation > ul {
+            width: 50%;
+        }
+
+        #main_navigation .store_link {
+            display: none;
+        }
+
+        #main_navigation .drop_down {
+            top: 40px;
+            left: 17px;
+        }
+
+        #main_navigation .drop_down:before {
+            left: 64px;
+        }
+
+        #main_navigation #store_menu_button {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+        #store_menu_button:hover {
+            background-color: #111;
+        }
+
+        #store_menu_button > a {
+            display: block;
+            padding: 8px 9px 8px 20px;
+            border-right: 1px solid #030202;
+            text-align: center;
+        }
+
+        #store_menu_button .tablet_label {
+            display: none;
+        }
+
+        #store_menu_button .mobile_label {
+            display: inline;
+        }
+
+        #store_menu .store_link {
+            display: inline-block;
+        }
+
+        #search_container {
+            position: relative;
+            float: none;
+            width: 50%;
+            height: 33px;
+            margin: 0;
+            text-align: center;
+        }
+
+        #search_container:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 1px;
+            height: 100%;
+            background-color: #2f2c2c;
+        }
+
+        #search_container input {
+            top: 6px;
+            left: -5px;
+        }
+    }
+
+    /* ******************************
+
+    SEARCH
+
+    ****************************** */
+
+    #tictail_search input {
+        width: 114px;
+        margin: 0;
+        padding: 3px 8px;
+        background-color: #161414;
+        -webkit-appearance: none;
+        -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.6);
+        border: 0;
+        outline: 0;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        border-radius: 20px;
+        font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+        font-size: 12px;
+        line-height: 16px;
+        color: #888;
+    }
+
+    #tictail_search input:focus {
+        background-color: #fff;
+        outline: 0;
+        color: #333;
+    }
+
+    #tictail_search_results {
+        top: 30px;
+        left: -51px;
+        width: 230px;
+        padding: 7px 0;
+        background-color: #f6f6f6;
+        -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.75), inset 0 1px 0 #fff;
+        -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.75), inset 0 1px 0 #fff;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.75), inset 0 1px 0 #fff;
+        border: 1px solid #000;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        font-size: 12px;
+        line-height: 15px;
+        color: #333;
+    }
+
+    #tictail_search_results .searching,
+    #tictail_search_results .no_results {
+        padding: 7px 10px;
+        color: #666;
+    }
+
+    #tictail_search_results .item {
+        border-top: 0;
+    }
+
+    #tictail_search_results .result {
+        padding: 7px 10px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    #tictail_search_results .result:hover {
+        color: #555;
+        text-decoration: none;
+    }
+
+    #tictail_search_results .thumb img {
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    #tictail_search_results .title {
+        margin-top: 4px;
+        font-weight: bold;
+    }
+
+    #tictail_search_results .price {
+        font-size: 12px;
+        color: #666;
+    }
+
+    @media only screen and (max-width: 768px) {
+        #tictail_search_results {
+            left: auto;
+            right: 0;
+        }
+    }
+
+    @media only screen and (max-width: 320px) {
+        #tictail_search_results {
+            right: 10px;
+        }
+    }
+
+    /* ******************************
+
+    FOOTER
+
+    ****************************** */
+
+    footer {
+        position: relative;
+        clear: both;
+        margin: 20px 0;
+        padding-top: 10px;
+        border-top: 1px solid #030202;
+        text-align: center;
+    }
+
+    footer:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 1px;
+        background-color: #2f2c2c;
+    }
+
+    footer .terms a {
+        margin: 0 10px;
+        font-size: 12px;
+        line-height: 16px;
+        color: #787676;
+        white-space: nowrap;
+    }
+
+    footer .terms a:hover {
+        color: #fff;
+    }
+
+    @media only screen and (max-width: 320px) {
+        footer {
+            padding: 0;
+        }
+
+        footer .terms a {
+            position: relative;
+            display: block;
+            margin: 0;
+            padding: 11px 10px 9px;
+            border-bottom: 1px solid #030202;
+        }
+
+        footer .terms a:before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: #2f2c2c;
+        }
+    }
+
+    /* ******************************
+
+    LIST PAGE
+
+    ****************************** */
+
+    .product_list {
+        margin: 0 10px -20px;
+    }
+
+    .product_list li {
+        width: 24.9%;
+        text-align: center;
+    }
+
+    .product_list a {
+        display: block;
+        margin: 0 10px 20px;
+        color: #fff;
+        text-shadow: rgba(0, 0, 0, 0.75) 0 1px 3px;
+    }
+
+    .product_list .image_container {
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+    }
+
+    .product_list .image_container:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.2);
+        -moz-box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.2);
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    .product_list .image_container img {
+        max-width: 100%;
+        vertical-align: middle;
+        -webkit-box-shadow: 0 5px 7px rgba(0, 0, 0, 0.85);
+        -moz-box-shadow: 0 5px 7px rgba(0, 0, 0, 0.85);
+        box-shadow: 0 5px 7px rgba(0, 0, 0, 0.85);
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    .product_list .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        visibility: hidden;
+        opacity: 0;
+        background: url({{assets_url}}/771/images/layover.png) 0 0 no-repeat rgba(50, 47, 47, 0.45);
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+
+        -webkit-transition: opacity 0.1s ease-in;
+        -moz-transition: opacity 0.1s ease-in;
+        -ms-transition: opacity 0.1s ease-in;
+        -o-transition: opacity 0.1s ease-in;
+        transition: opacity 0.1s ease-in;
+    }
+
+    .product_list a:hover .overlay {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .product_list .badge {
+        position: absolute;
+        top: 51%;
+        left: 50%;
+        width: 150px;
+        margin: -15px 0 0 -75px;
+        background-color: rgba(38, 37, 37, 0.7);
+        -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.6);
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+        font-size: 12px;
+        line-height: 30px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: rgba(0, 0, 0, 0.45) 0 1px 0;
+        white-space: nowrap;
+
+        -webkit-transition: top 0.1s ease-in;
+        -moz-transition: top 0.1s ease-in;
+        -ms-transition: top 0.1s ease-in;
+        -o-transition: top 0.1s ease-in;
+        transition: top 0.1s ease-in;
+    }
+
+    .product_list a:hover .badge {
+        top: 50%;
+    }
+
+    .product_list h2,
+    .product_list h3 {
+        margin: 6px 0;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: bold;
+    }
+
+    .product_list .price {
+        font-size: 12px;
+        line-height: 14px;
+        font-weight: bold;
+        color: #bbb;
+    }
+
+    .product_list .currency {
+        font-size: 10px;
+        font-weight: normal;
+    }
+
+    .product_list .out_of_stock {
+        font-style: italic;
+        font-weight: normal;
+        color: #f22f2f;
+    }
+
+    @media only screen and (min-width: 1160px) {
+        .product_list {
+            margin: 0 -10px -20px;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .product_list li {
+            width: 33%;
+        }
+    }
+
+    @media only screen and (max-width: 575px) {
+        .product_list li {
+            width: 49.9%;
+        }
+
+        .product_list h2,
+        .product_list h3 {
+            margin: 8px 0 4px;
+            font-size: 12px;
+            line-height: 15px;
+        }
+    }
+
+    /* ******************************
+
+    PRODUCT PAGE
+
+    ****************************** */
+
+    #product_info {
+        margin: 0 10px 20px;
+    }
+
+    #product_info .head_container {
+        display: none;
+    }
+
+    #product_info .image_container {
+        width: 50%;
+        text-align: center;
+    }
+
+    #product_info .image_container .tictail_slideshow {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    #product_info .image_container img {
+        max-width: 100%;
+        -webkit-box-shadow: 0 5px 7px rgba(0, 0, 0, 0.85);
+        -moz-box-shadow: 0 5px 7px rgba(0, 0, 0, 0.85);
+        box-shadow: 0 5px 7px rgba(0, 0, 0, 0.85);
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    #product_info .image_container figcaption {
+        margin-top: 20px;
+        font-size: 11px;
+        line-height: 14px;
+        color: #a5a4a4;
+    }
+
+    #product_info .details_container {
+        width: 49.9%;
+        font-size: 14px;
+        line-height: 19px;
+    }
+
+    #product_info .details_container .inner_container {
+        padding: 0 12%;
+    }
+
+    #product_info h1 {
+        text-align: center;
+    }
+
+    #product_info .price {
+        margin: 20px 0;
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    #product_info .currency {
+        font-size: 12px;
+        font-weight: normal;
+    }
+
+    #product_info .description {
+        margin: 20px 0 30px;
+    }
+
+    #product_info .description a {
+        color: #ccc;
+        text-decoration: underline;
+    }
+
+    #product_info .description a:hover {
+        color: #888;
+    }
+
+    #product_info .variations_container {
+        min-height: 38px;
+        margin: 10px 0;
+    }
+
+    #product_info .add_to_cart {
+        clear: both;
+        margin: 20px 0;
+    }
+
+    #product_info .out_of_stock {
+        margin: 20px 0;
+        font-style: italic;
+        color: #f22f2f;
+    }
+
+    #product_info .tictail_social_buttons {
+        margin: 30px 0;
+    }
+
+    #related_products {
+        position: relative;
+        margin: 40px 0 20px;
+        padding-top: 20px;
+        border-top: 1px solid #030202;
+    }
+
+    #related_products:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 1px;
+        background-color: #2f2c2c;
+    }
+
+    #related_products h2 {
+        margin: 0 10px 10px;
+        color: #777;
+    }
+
+    @media only screen and (min-width: 1160px) {
+        #product_info {
+            margin: 0 0 20px;
+        }
+
+        #related_products h2 {
+            margin: 0 0 10px;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        #product_info .head_container {
+            display: block;
+        }
+
+        #product_info .image_container,
+        #product_info .details_container {
+            width: 100%;
+        }
+
+        #product_info .image_container figcaption {
+            display: none;
+        }
+
+        #product_images {
+            margin-bottom: 20px;
+        }
+
+        #product_info .details_container .inner_container {
+            padding: 0 6%;
+        }
+
+        #product_info .details_container h1,
+        #product_info .details_container .price {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: 320px) {
+        #product_info .details_container .inner_container {
+            padding: 0 20px;
+        }
+
+        #product_info h1 {
+            margin: 0 0 10px;
+        }
+
+        #product_info .price {
+            margin: 10px 0 20px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        #related_products h2 {
+            margin: 0 0 20px;
+            color: #fff;
+            text-align: center;
+        }
+    }
+
+    /* ******************************
+
+    DROPKICK STYLES
+
+    ****************************** */
+
+    /***** Begin Theme ******/
+
+    /* One container to bind them... */
+    .dk_container {
+        background-color: #333;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+        font-size: 12px;
+        line-height: 22px;
+        font-weight: normal;
+    }
+    .dk_container:focus {
+        outline: 0;
+    }
+    .dk_container a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Opens the dropdown and holds the menu label */
+    .dk_toggle {
+        padding: 7px 45px 7px 10px;
+        background: url({{assets_url}}/771/images/dropdownbutton.png) 100% 50% no-repeat;
+        border: 1px solid #000;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        color: #fff;
+        text-align: left;
+    }
+
+    /* Applied when the dropdown is focused */
+    .dk_focus .dk_toggle {
+    }
+    .dk_focus .dk_toggle {
+    }
+
+    /* Applied whenever the dropdown is open */
+    .dk_open {
+        z-index: 10;
+    }
+    .dk_open .dk_toggle {
+        background-color: #333;
+        border-color: #000;
+        -webkit-border-radius: 5px 5px 0 0;
+        -moz-border-radius: 5px 5px 0 0;
+        border-radius: 5px 5px 0 0;
+        color: #fff;
+    }
+
+    /* The outer container of the options */
+    .dk_options {
+        -webkit-box-shadow: rgba(0, 0, 0, .2) 0 2px 8px;
+        -moz-box-shadow: rgba(0, 0, 0, .2) 0 2px 8px;
+        box-shadow: rgba(0, 0, 0, .2) 0 2px 8px;
+        -webkit-border-radius: 0 0 5px 5px;
+        -moz-border-radius: 0 0 5px 5px;
+        border-radius: 0 0 5px 5px;
+    }
+    .dk_options a {
+        padding: 8px 10px;
+        background-color: #fff;
+        border-bottom: 1px solid #bbb;
+        font-weight: bold;
+        color: #333;
+    }
+    .dk_options li:last-child a {
+        border-bottom: none;
+    }
+    .dk_options a:hover,
+    .dk_option_current a {
+        background-color: #ddd;
+        border-bottom-color: #999;
+        color: #000;
+        text-decoration: none;
+    }
+
+    /* Inner container for options, this is what makes the scrollbar possible. */
+    .dk_options_inner {
+        max-height: 250px;
+        border: 1px solid #8c8c8e;
+        border-bottom-width: 2px;
+        border-bottom-color: #999;
+        -webkit-border-radius: 0 0 5px 5px;
+        -moz-border-radius: 0 0 5px 5px;
+        border-radius: 0 0 5px 5px;
+        color: #333;
+    }
+
+    /* Set a max-height on the options inner */
+    .dk_options_inner,
+    .dk_touch .dk_options {
+        max-height: 250px;
+    }
+
+    /******  End Theme ******/
+
+    /***** Critical to the continued enjoyment of working dropdowns ******/
+
+    .dk_container {
+        display: none;
+        float: left;
+        position: relative;
+    }
+    .dk_container a {
+        outline: 0;
+    }
+
+    .dk_toggle {
+        display: -moz-inline-stack;
+        display: inline-block;
+        *display: inline;
+        position: relative;
+        zoom: 1;
+    }
+
+    .dk_open {
+        position: relative;
+    }
+    .dk_open .dk_options {
+        display: block;
+    }
+    .dk_open .dk_label {
+        color: inherit;
+    }
+
+    .dk_options {
+        display: none;
+        margin-top: -1px;
+        position: absolute;
+        right: 0;
+        width: 100%;
+    }
+    .dk_options a,
+    .dk_options a:link,
+    .dk_options a:visited {
+        display: block;
+    }
+    .dk_options_inner {
+        overflow: auto;
+        position: relative;
+    }
+
+    .dk_touch .dk_options {
+        overflow: hidden;
+    }
+
+    .dk_touch .dk_options_inner {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .dk_fouc select {
+        position: relative;
+        top: -99999em;
+        visibility: hidden;
+    }
+
+    /***** End Critical to the continued enjoyment of working dropdowns ******/
+
+    /* ******************************
+
+    "ADD TO CART" BUTTON
+
+    ****************************** */
+
+    .tictail_add_to_cart_button {
+        min-width: 128px;
+        margin: 0;
+        padding: 12px 10px;
+        background: #25842e;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #25842e), color-stop(100%, #165c1e));
+        background: -webkit-linear-gradient(top, #25842e 0%, #165c1e 100%);
+        background: -moz-linear-gradient(top, #25842e 0%, #165c1e 100%);
+        background: -ms-linear-gradient(top, #25842e 0%, #165c1e 100%);
+        background: -o-linear-gradient(top, #25842e 0%, #165c1e 100%);
+        background: linear-gradient(top, #25842e 0%, #165c1e 100%);
+        -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.75), inset 0px 1px 0 rgba(255, 255, 255, 0.25);
+        -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.75), inset 0px 1px 0 rgba(255, 255, 255, 0.25);
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.75), inset 0px 1px 0 rgba(255, 255, 255, 0.25);
+        border: 0;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        font-family: Helvetica, Arial, 'Lucida Grande', sans-serif;
+        font-size: 12px;
+        line-height: 15px;
+        font-weight: bold;
+        color: #e1eae2;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .tictail_add_to_cart_button:hover {
+        color: #fff;
+    }
+
+    .tictail_add_to_cart_button:active{
+        background: #165c1e;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #165c1e), color-stop(100%, #25842e));
+        background: -webkit-linear-gradient(top, #165c1e 0%, #25842e 100%);
+        background: -moz-linear-gradient(top, #165c1e 0%, #25842e 100%);
+        background: -ms-linear-gradient(top, #165c1e 0%, #25842e 100%);
+        background: -o-linear-gradient(top, #165c1e 0%, #25842e 100%);
+        background: linear-gradient(top, #165c1e 0%, #25842e 100%);
+        -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.65);
+        -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.65);
+        box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.65);
+    }
+
+    /* ******************************
+
+    GENERIC PAGES
+
+    ****************************** */
+
+    .page_container {
+        max-width: 800px;
+        margin: 0 auto 40px;
+        padding: 0 10px;
+        text-align: center;
+    }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="{{assets_url}}/shared/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="container">
+    <header>
+        <a id="logotype" href="{{store_url}}">
+            {{#logotype}}
+                <img src="{{url-300}}" alt="{{store_name}}">
+            {{/logotype}}
+            {{#no_logotype}}
+                {{store_name}}
+            {{/no_logotype}}
+        </a>
+
+        <nav id="main_navigation">
+            <ul class="row">
+                {{! This menu item is only displayed on tablets and mobile devices }}
+                <li id="store_menu_button" class="column">
+                    <a href="{{store_url}}/products">
+                        {{! This label is displayed on tablets }}
+                        <span class="tablet_label">Store</span>
+                        {{! This label is displayed on mobile devices }}
+                        <span class="mobile_label">Menu</span>
+                    </a>
+
+                    <div id="store_menu" class="drop_down row">
+                        {{#navigation}}
+                        <div class="section column {{#is_current}}selected{{/is_current}}">
+                            <a href="{{url}}">
+                                {{label}}
+                            </a>
+
+                            {{#children?}}
+                            <ul class="child_navigation">
+                                {{#children}}
+                                <li>
+                                    <a href="{{url}}">
+                                        {{label}}
+                                    </a>
+                                </li>
+                                {{/children}}
+                            </ul>
+                            {{/children?}}
+                        </div>
+                        {{/navigation}}
+
+                        {{! These store links are only displayed on mobile devices }}
+                        {{#store_blog_url}}
+                        <div class="store_link section column">
+                            <a href="{{store_blog_url}}" target="_blank">
+                                Blog
+                            </a>
+                        </div>
+                        {{/store_blog_url}}
+
+                        <div class="store_link section column {{#about_page}}selected{{/about_page}}">
+                            <a href="{{store_url}}/page/about">
+                                About
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                {{! These navigation items are not displayed on tablets and mobile devices }}
+                {{#navigation}}
+                <li class="navigation_item column {{#is_current}}selected{{/is_current}}">
+                    <a href="{{url}}">
+                        {{label}}
+                    </a>
+
+                    {{#children?}}
+                    <ul class="drop_down">
+                        {{#children}}
+                        <li>
+                            <a href="{{url}}">
+                                {{label}}
+                            </a>
+                        </li>
+                        {{/children}}
+                    </ul>
+                    {{/children?}}
+                </li>
+                {{/navigation}}
+
+                {{! These store links are not displayed on mobile devices }}
+                {{#store_blog_url}}
+                <li class="store_link column">
+                    <a href="{{store_blog_url}}" target="_blank">
+                        Blog
+                    </a>
+                </li>
+                {{/store_blog_url}}
+
+                <li class="store_link column {{#about_page}}selected{{/about_page}}">
+                    <a href="{{store_url}}/page/about">
+                        About
+                    </a>
+                </li>
+            </ul>
+
+            <div id="search_container">
+                {{search}}
+            </div>
+        </nav>
+    </header>
+
+
+{{#list_page}}
+
+    <section id="products">
+        {{#products?}}
+        <ul class="product_list row">
+            {{#products}}
+            <li class="column">
+                <a href="{{url}}">
+                    <div class="image_container">
+                        {{#primary_image}}
+                        <img src="{{url-300}}" alt="{{title}}">
+                        <div class="overlay">
+                            <div class="badge">Go to product page</div>
+                        </div>
+                        {{/primary_image}}
+                    </div>
+
+                    <h2>{{title}}</h2>
+                    {{#in_stock}}
+                    <span class="price">{{price_with_currency}}</span>
+                    {{/in_stock}}
+                    {{#out_of_stock}}
+                    <span class="price out_of_stock">Out of stock</span>
+                    {{/out_of_stock}}
+                </a>
+            </li>
+            {{/products}}
+        </ul>
+        {{/products?}}
+    </section>
+
+{{/list_page}}
+
+
+{{#product_page}}
+
+    <article id="product" itemscope itemtype="http://schema.org/Product">
+        {{#product}}
+        <div id="product_info" class="row">
+            {{! This section is only displayed on tablets and mobile devices }}
+            <section class="head_container">
+                <h1>{{title}}</h1>
+
+                <div class="price">
+                    {{price_with_currency}}
+                </div>
+            </section>
+
+            <figure class="image_container column">
+                {{#slideshow-500}}{{/slideshow-500}}
+
+                <figcaption>Click on image to view full size</figcaption>
+            </figure>
+
+            <section class="details_container column">
+                <div class="inner_container">
+                    <h1 itemprop="name">{{title}}</h1>
+
+                    <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <span itemprop="price">{{price_with_currency}}</span>
+
+                        {{! This is meta data for search engines etc. }}
+                        <meta itemprop="priceCurrency" content="{{currency_code}}">
+                        {{#in_stock}}
+                        <link itemprop="availability" href="http://schema.org/InStock">
+                        {{/in_stock}}
+                        {{#out_of_stock}}
+                        <link itemprop="availability" href="http://schema.org/OutOfStock">
+                        {{/out_of_stock}}
+                    </div>
+
+                    <div class="description html_content" itemprop="description">
+                        {{description}}
+                    </div>
+
+                    {{! The #add_to_cart block is only rendered if the product is in stock }}
+                    {{#add_to_cart}}
+                    <div class="variations_container">
+                        {{#variations_select}}{{/variations_select}}
+                    </div>
+
+                    <div class="add_to_cart">
+                        {{#add_to_cart_button}}
+                        Add to cart
+                        {{/add_to_cart_button}}
+                    </div>
+                    {{/add_to_cart}}
+
+                    {{! This block will be rendered instead of the #add_to_cart block when the product is out of stock }}
+                    {{#out_of_stock}}
+                    <div class="out_of_stock">
+                        This product is out of stock
+                    </div>
+                    {{/out_of_stock}}
+
+                    {{social_buttons}}
+                </div>
+            </section>
+        </div>
+        {{/product}}
+
+        {{! Render a list of related products if there are any }}
+        {{#related_products?}}
+        <aside id="related_products">
+            <h2>You might also like...</h2>
+
+            <ul class="product_list row">
+                {{#related_products}}
+                <li class="column">
+                    <a href="{{url}}">
+                        <div class="image_container">
+                            {{#primary_image}}
+                            <img src="{{url-300}}" alt="{{title}}">
+                            <div class="overlay">
+                                <div class="badge">Go to product page</div>
+                            </div>
+                            {{/primary_image}}
+                        </div>
+
+                        <h3>{{title}}</h3>
+                        {{#in_stock}}
+                        <span class="price">{{price_with_currency}}</span>
+                        {{/in_stock}}
+                        {{#out_of_stock}}
+                        <span class="price out_of_stock">Out of stock</span>
+                        {{/out_of_stock}}
+                    </a>
+                </li>
+                {{/related_products}}
+            </ul>
+        </aside>
+        {{/related_products?}}
+    </article>
+
+{{/product_page}}
+
+
+{{#about_page}}
+
+    <article id="about" class="page_container">
+        <h1>About</h1>
+
+        <div class="html_content">
+            {{store_description}}
+        </div>
+    </article>
+
+{{/about_page}}
+
+
+    <footer>
+        <div class="terms">
+            {{#return_policy}}Return Policy{{/return_policy}}
+            {{#terms}}Terms &amp; Conditions{{/terms}}
+        </div>
+    </footer>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<script src="{{assets_url}}/771/jquery.dropkick-1.0.0.js"></script>
+<script>
+$('.tictail_variations_select').dropkick({
+    width: 160,
+    height: 30
+});
+</script>
+
+<script src="{{assets_url}}/shared/js/jquery.masonry.2.1.03.min.js"></script>
+<script>
+$('.product_list').imagesLoaded(function() {
+    var list = this,
+        rearrange = function() {
+            list.masonry({
+                itemSelector: '.column'
+            });
+        };
+
+    rearrange();
+    $(window).resize(rearrange);
+});
+</script>
+
+</body>
+</html>
+
+<!--
+Want to create your own Tictail theme?
+Check out the documentation at https://tictail.com/docs
+-->
+
